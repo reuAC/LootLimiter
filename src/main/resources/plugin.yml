@@ -1,0 +1,9 @@
+name: LootLimiter
+version: '${project.version}'
+main: org.reuac.lootlimiter.LootLimiter
+api-version: '1.17'
+commands:
+  lootlimiter:
+    description: "lootlimiter"
+    permission: lootlimiter.main
+    aliases: "looter"
