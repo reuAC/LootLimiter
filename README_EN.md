@@ -6,7 +6,7 @@ Limits specific block drops in designated worlds. The purpose is to guide player
 This plugin is compatible with 1.17 and above.  
 You can customize the restricted blocks and configure the messages, screen titles, sounds, and particle effects players receive when the limitation is triggered.
 ## Commands
-`/lootimiter` Reloads the configuration.  
+`/lootlimiter` Reloads the configuration.  
 **Alias：`/looter`**
 
 ## Configuration File
