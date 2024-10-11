@@ -72,6 +72,7 @@ Sound:
   sounds:
     - "AMBIENT_BASALT_DELTAS_ADDITIONS"
     # https://bukkit.windit.net/javadoc/org/bukkit/Sound.html
+# Particle effects generated at the location of the broken block after triggering the restriction
 spawnParticle:
   # Enable or disable particles
   enable: true

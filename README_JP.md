@@ -71,6 +71,7 @@ Sound:
   sounds:
     - "AMBIENT_BASALT_DELTAS_ADDITIONS"
     # https://bukkit.windit.net/javadoc/org/bukkit/Sound.html
+# 制限が発動された後、破壊されたブロックの場所で生成されるパーティクルエフェクト
 spawnParticle:
   # 有効かどうか
   enable: true
