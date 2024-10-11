@@ -74,6 +74,7 @@ Sound:
   sounds:
     - "AMBIENT_BASALT_DELTAS_ADDITIONS"
     # https://bukkit.windit.net/javadoc/org/bukkit/Sound.html
+# 触发限制后在被破坏方块处生成的粒子效果
 spawnParticle:
   # 是否启用
   enable: true
