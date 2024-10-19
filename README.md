@@ -15,6 +15,8 @@
 下面是配置文件内容及其对应的设置项的注释。
 
 ```yaml
+# 领地中是否取消限制。
+noLimitOnResidence: true
 # 作用于的方块
 # https://bukkit.windit.net/javadoc/org/bukkit/Material.html
 LimitItems:
@@ -70,10 +72,9 @@ Sound:
   volume: 1.0
   # 音高（浮点数）
   pitch: 0.0
-  # 声音列表
-  sounds:
-    - "AMBIENT_BASALT_DELTAS_ADDITIONS"
-    # https://bukkit.windit.net/javadoc/org/bukkit/Sound.html
+  # 声音
+  sound: "AMBIENT_BASALT_DELTAS_ADDITIONS"
+  # https://bukkit.windit.net/javadoc/org/bukkit/Sound.html
 # 触发限制后在被破坏方块处生成的粒子效果
 spawnParticle:
   # 是否启用
@@ -95,10 +96,8 @@ spawnParticle:
     X: 0.0
     Y: 0.0
     Z: 0.0
-  # 粒子效果名称列表
-  particles:
-    - "FALLING_HONEY"
-    - "LANDING_HONEY"
+  # 粒子效果名称
+  particle: "FALLING_HONEY"
   # https://bukkit.windit.net/javadoc/org/bukkit/Particle.html
 ```
 
