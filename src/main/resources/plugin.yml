@@ -2,6 +2,7 @@ name: LootLimiter
 version: '${project.version}'
 main: org.reuac.lootlimiter.LootLimiter
 api-version: '1.17'
+softdepend: [Residence]
 commands:
   lootlimiter:
     description: "lootlimiter"

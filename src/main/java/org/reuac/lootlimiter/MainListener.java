@@ -1,5 +1,6 @@
 package org.reuac.lootlimiter;
 
+import com.bekvon.bukkit.residence.Residence;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,8 +15,8 @@ public class MainListener implements Listener {
     public static List<Material> LimiterItems = new ArrayList<>();
     public static List<World> LimiterWorlds = new ArrayList<>();
     public static List<String> Messages = new ArrayList<>();
-    public static List<Sound> Sounds = new ArrayList<>();
-    public static List<Particle> Particles = new ArrayList<>();
+    public static Sound Sound;
+    public static Particle Particle;
 
     public static boolean messageEnabled;
     public static boolean titleEnabled;
@@ -28,12 +29,10 @@ public class MainListener implements Listener {
     public static int stay;
     public static int fadeOut;
 
-    public static int soundInterval;
     public static float soundVolume;
     public static float soundPitch;
 
     public static int particleCount;
-    public static int particleInterval;
     public static double offsetX;
     public static double offsetY;
     public static double offsetZ;
@@ -42,10 +41,23 @@ public class MainListener implements Listener {
     public static double particleY;
     public static double particleZ;
 
+    public static boolean noLimitOnResidence;
+
+    public static boolean hasResidence;
+    public static com.bekvon.bukkit.residence.protection.ResidenceManager ResManager;
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) {return;}
         if (!LimiterItems.contains(event.getBlock().getType())) {return;}
         if (!LimiterWorlds.contains(event.getBlock().getWorld())) {return;}
+        if (noLimitOnResidence && hasResidence){
+//            Location loc = event.getBlock().getLocation();
+//            ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(loc);
+//            if(res!=null){return;}
+
+            if (Residence.getInstance().getResidenceManager().getByLoc(event.getBlock().getLocation()) != null){return;}
+        }
         Player player = event.getPlayer();
         if (player.hasPermission("lootlimiter.bypass")) {return;}
         event.setDropItems(false);
@@ -61,7 +73,7 @@ public class MainListener implements Listener {
         }
 
         if (soundEnabled){
-            playSoundsSequentially(player,Sounds,soundInterval);
+            playSoundsSequentially(player,Sound);
         }
 
         if (ParticleEnabled){
@@ -71,41 +83,15 @@ public class MainListener implements Listener {
             location.setZ(location.getZ() + particleZ);
             spawnParticlesWithInterval(location);
         }
-
     }
 
-    public void playSoundsSequentially(Player player, List<Sound> sounds, int interval) {
+    public void playSoundsSequentially(Player player, Sound sound) {
         Location location = player.getLocation();
-
-        new BukkitRunnable() {
-            private int index = 0;
-
-            @Override
-            public void run() {
-                if (index < sounds.size()) {
-                    player.playSound(location, sounds.get(index), soundVolume, soundPitch);
-                    index++;
-                } else {
-                    cancel();
-                }
-            }
-        }.runTaskTimer(LootLimiter.main, 0L, interval);
+        player.playSound(location, sound, soundVolume, soundPitch);
     }
 
     public static void spawnParticlesWithInterval(Location location) {
         World world = location.getWorld();
-        new BukkitRunnable() {
-            private int index = 0;
-
-            @Override
-            public void run() {
-                if (index < Particles.size()) {
-                    world.spawnParticle(Particles.get(index),location,particleCount,offsetX,offsetY,offsetZ,extra);
-                    index++;
-                } else {
-                    cancel();
-                }
-            }
-        }.runTaskTimer(LootLimiter.main, 0L, particleInterval);
+        world.spawnParticle(Particle,location,particleCount,offsetX,offsetY,offsetZ,extra);
     }
 }

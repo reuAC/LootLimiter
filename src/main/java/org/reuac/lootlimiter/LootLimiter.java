@@ -1,9 +1,14 @@
 package org.reuac.lootlimiter;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import org.bukkit.*;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+
+import static com.bekvon.bukkit.residence.api.ResidenceApi.getResidenceManager;
 
 public final class LootLimiter extends JavaPlugin {
     public static String PluginName = "[LootLimiter] ";
@@ -36,6 +41,7 @@ public final class LootLimiter extends JavaPlugin {
         MainListener.LimiterItems.clear();
         MainListener.LimiterWorlds.clear();
         MainListener.Messages.clear();
+        MainListener.noLimitOnResidence = getConfig().getBoolean("noLimitOnResidence");
 
 
         if (getConfig().getBoolean("Messages.enable")){
@@ -57,19 +63,17 @@ public final class LootLimiter extends JavaPlugin {
 
         if (getConfig().getBoolean("Sound.enable")){
             MainListener.soundEnabled = true;
-            List<String> sounds = getConfig().getStringList("Sound.sounds");
-            MainListener.soundInterval = getConfig().getInt("Sound.interval");
+            String sound = getConfig().getString("Sound.sound");
             MainListener.soundVolume = getConfig().getInt("Sound.volume");
             MainListener.soundPitch = getConfig().getInt("Sound.pitch");
 
-            for (String soundName : sounds) {
-                try {
-                    MainListener.Sounds.add(Sound.valueOf(soundName));
-                } catch (IllegalArgumentException e) {
-                    getLogger().severe("Invalid sound name: " + soundName);
-                    MainCommand.hasError = true;
-                }
+            try {
+                MainListener.Sound = Sound.valueOf(sound);
+            } catch (IllegalArgumentException e) {
+                getLogger().severe("Invalid sound name: " + sound);
+                MainCommand.hasError = true;
             }
+
         }else {MainListener.soundEnabled = false;}
 
         if (getConfig().getBoolean("spawnParticle.enable")){
@@ -78,19 +82,17 @@ public final class LootLimiter extends JavaPlugin {
             MainListener.offsetY = getConfig().getInt("spawnParticle.offsetY");
             MainListener.offsetZ = getConfig().getInt("spawnParticle.offsetZ");
             MainListener.particleCount = getConfig().getInt("spawnParticle.count");
-            MainListener.particleInterval = getConfig().getInt("spawnParticle.interval");
             MainListener.extra = getConfig().getDouble("spawnParticle.extra");
             MainListener.particleX = getConfig().getInt("spawnParticle.revise.X");
             MainListener.particleY = getConfig().getInt("spawnParticle.revise.Y");
             MainListener.particleZ = getConfig().getInt("spawnParticle.revise.Z");
-            List<String> particles = getConfig().getStringList("spawnParticle.particles");
-            for (String particle : particles) {
-                try {
-                    MainListener.Particles.add(Particle.valueOf(particle));
-                } catch (IllegalArgumentException e) {
-                    getLogger().severe("Invalid particle name: " + particle);
-                    MainCommand.hasError = true;
-                }
+            String particle = getConfig().getString("spawnParticle.particle");
+
+            try {
+                MainListener.Particle = Particle.valueOf(particle);
+            } catch (IllegalArgumentException e) {
+                getLogger().severe("Invalid particle name: " + particle);
+                MainCommand.hasError = true;
             }
         }else {MainListener.ParticleEnabled = false;}
 
@@ -114,5 +116,14 @@ public final class LootLimiter extends JavaPlugin {
                 MainCommand.hasError = true;
             }
         }
+
+        Plugin resPlug = getServer().getPluginManager().getPlugin("Residence");
+        if (resPlug != null){
+            MainListener.hasResidence = true;
+            MainListener.ResManager = Residence.getInstance().getResidenceManager();
+        }else {
+            MainListener.hasResidence = false;
+        }
+
     }
 }
